@@ -57,5 +57,9 @@ Grouptalk::Application.routes.draw do
   # match ':controller(/:action(/:id(.:format)))'
 
   #customize devise routes
-  devise_for :users
+  devise_for :users, :controllers => {:registrations => "user/registrations", :sessions => "user/sessions", :passwords => "user/passwords"}
+
+#  devise_scope :users do
+#    get "sign_in", :to => "devise/sessions#new"
+#  end
 end
