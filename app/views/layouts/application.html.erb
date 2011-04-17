@@ -8,12 +8,32 @@
     <%= yield(:head) %>
   </head>
   <body>
-    <div id="container">
-      <% flash.each do |name, msg| %>
-        <%= content_tag :div, msg, :id => "flash_#{name}" %>
-      <% end %>
-      <%= content_tag :h1, yield(:title) if show_title? %>
-      <%= yield %>
+    <div id="header">
+      <div id="top_links_container">
+        <% if current_user %>
+            Logged in as <%= current_user.email %> |
+            <%= link_to 'home', root_path %> | 
+            <%= link_to 'logout', destroy_user_session_path %>
+        <% else %>
+            <%= link_to 'home', root_path %> | 
+            <%= link_to 'login', new_user_session_path %>
+        <% end %>
+      </div>
     </div>
+    <div class="clear"></div>
+    <div id="container">
+      <div id="main">
+          <% flash.each do |name, msg| %>
+            <%= content_tag :div, msg, :id => "flash_#{name}" %>
+          <% end %>
+          <%= content_tag :h1, yield(:title) if show_title? %>
+          <%= yield %>
+      </div>
+      <div id="side">
+
+      </div>
+      <div class="clear"></div>
+    </div>
+    <div class="footer"></div>
   </body>
 </html>
