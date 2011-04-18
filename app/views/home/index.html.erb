@@ -1,0 +1,4 @@
+<%= h link_to "Users", user_home_path %>
+<%= h link_to "Groups", group_home_path %>
+
+<%= render :partial => "posts_list", :locals => {:posts => @posts } %>

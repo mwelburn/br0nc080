@@ -18,9 +18,77 @@ class User < ActiveRecord::Base
   validates_presence_of :password, :on => :create
   validates_confirmation_of :password
   validates_length_of :password, :minimum => 6, :allow_blank => true
-  validates_exclusion_of :username, :in => %w(admin superuser following login logout flits users sessions applications), :message => "is not a valid username"
+  validates_exclusion_of :username, :in => %w(admin superuser), :message => "is not a valid username"
 
-  
+  has_many :posts, :dependent => :destroy
+  has_many :memberships
+  has_many :groups, :through => :memberships
+  has_many :friendships
+  has_many :friends, :through => :friendships
+
+  def add_friend(friend)
+    friendship = friendships.build(:friend_id => friend.id)
+    if !friendship.save
+      logger.debug "User '${friend.email}' already exists in the user's friendship list."
+    end
+  end
+
+  def remove_friend(friend)
+    friendship = Friendship.find(:first, :conditions => ["user_id = ? and friend_id = ?", self.id, friend.id])
+    if friendship
+      friendship.destroy
+    end
+  end
+
+  def friends_of
+    Friendship.find(:all, :conditions => ["friend_id = ?", self.id]).map{|f| f.user}
+  end
+
+  def is_friend?(friend)
+    return self.friends.include? friend
+  end
+
+  def toggle_follow(friend)
+    if (is_friend? friend)
+      current_user.remove_friend(:friend => friend)
+    else
+      current_user.add_friend(:friend => friend)
+    end
+  end
+
+  def all_posts
+    Post.find(:all, :conditions => ["user_id in (?)", friends.map(&:id).push(self.id)], :order => "created_at desc")
+  end
+
+  def add_group(group)
+    membership = memberships.build(:group_id => group.id)
+    if !membership.save
+      logger.debug "User already belongs in group '${group.group_name}'."
+    end
+  end
+
+  def remove_group(group)
+    membership = Membership.find(:first, :conditions => ["user_id = ? and group_id = ?", self.id, group.id])
+    if membership
+      membership.destroy
+    end
+  end
+
+  def toggle_membership(group)
+    if (group.member_of? current_user)
+      current_user.remove_group(:group => group)
+    else
+      current_user.add_group(:group => group)
+    end
+  end
+
+  def all_groups
+    Membership.find(:all, :conditions => ["user_id = ?", self.id]).map{|f| f.group}
+  end
+
+  def self.find_by_search_query(q)
+    User.find(:all, :conditions => ["username like ? OR email like ?", "%#{q}%", "%#{q}#"])
+  end
 
   #protected methods below
   protected

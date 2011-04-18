@@ -1,4 +1,7 @@
 Grouptalk::Application.routes.draw do
+
+  devise_for :admins
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -59,7 +62,40 @@ Grouptalk::Application.routes.draw do
   #customize devise routes
   devise_for :users, :controllers => {:registrations => "user/registrations", :sessions => "user/sessions", :passwords => "user/passwords"}
 
-#  devise_scope :users do
-#    get "sign_in", :to => "devise/sessions#new"
+#  devise_scope :user do
+#    get "sign_in",              :to => "user/sessions#new",       :as => :new_user_session
+#    post "sign_in",              :to => "user/sessions#create",       :as => :user_session
+#    get "sign_out",             :to => "user/sessions#destroy",   :as => :destroy_user_session
+
+#    post "password",      :to => "user/passwords#create",   :as => :user_password
+#    get "password/new",  :to => "user/passwords#new",      :as => :new_user_password
+#    get "password/edit",      :to => "user/passwords#edit",     :as => :edit_user_password
+#    put "password", :to => "user/passwords#update"
+
+#    get "cancel",             :to => "user/registrations#cancel",  :as => :cancel_user_registration
+#    post "",             :to => "user/registrations#create",  :as => :user_registration
+#    get "sign_up",             :to => "user/registrations#new",  :as => :new_user_registration
+#    get "edit",             :to => "user/registrations#edit",  :as => :edit_user_registration
 #  end
+
+  resources :posts
+  resources :groups
+  resources :users
+
+#  match '/search' => 'home#search', :as => :search
+  match '/group' => 'home#groups', :as => :group_home
+  match '/user' => 'home#users', :as => :user_home
+
+#  match '/friends' => 'users#friends', :as => :friends_posts
+
+  match '/group/:group_id' => 'groups#index', :as => :group_info
+  match '/group/:group_id/posts' => 'groups#posts', :as => :group_posts
+  match '/group/:group_id/users' => 'groups#users', :as => :group_users
+  match '/group/:group_id/toggle_follow' => 'groups#toggle_follow', :as => :toggle_follow_group
+
+  match '/user/:username' => 'users#index', :as => :user_info
+  match '/user/:username/posts' => 'users#posts', :as => :user_posts
+  match '/user/:username/groups' => 'users#groups', :as => :user_groups
+  match '/user/:username/remove_friend' => 'users#remove_friend', :as => :remove_friend
+  match '/user/:username/toggle_follow' => 'users#toggle_follow', :as => :toggle_follow_user
 end

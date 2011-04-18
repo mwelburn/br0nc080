@@ -1,0 +1,12 @@
+<ul id="groups_list">
+	<% groups.each do |group| %>
+		<li<% if groups.first == group %> class="first"<% end %>>
+			<div class="group_message_container">
+                <%= group.group_name %>
+				<%= h link_to group.group_name, group_info_path(group.id) %>
+				<%= h group.group_description %>
+			</div>
+			<div class="clear"></div>
+		 </li>
+	<% end %>
+</ul>

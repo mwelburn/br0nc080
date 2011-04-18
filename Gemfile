@@ -8,11 +8,13 @@ gem 'rails', '3.0.5'
 gem 'mysql'
 gem 'devise'
 gem 'jquery-rails'
+gem 'cancan'
 
 group :development do
   gem 'nifty-generators'
-  #gem 'faker'
-  #gem 'populator'
+  gem 'faker'
+  gem 'populator'
+  gem 'ruby-debug19', :require => 'ruby-debug'
   #gem 'rspec'
 end
 
