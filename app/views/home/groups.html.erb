@@ -1,0 +1,18 @@
+<ul id="groups_list">
+	<% @groups.each do |group| %>
+		<li id="<%= group.group_name %>" <% if @groups.first == group %> class="first"<% end %>>
+			<div class="group_description_container" style="width: 305px;">
+				<h3><%= h link_to group.group_name, group_info_path(group.id) %></h3>
+                <% if !group.group_description.length.nil? %>
+    				<%= h group.group_description %>
+                <% end %>
+			</div>
+            <% if !current_user.nil? %>
+                <div class="button_container">
+                    <input type='button' id="btn_<%= group.id %>" name='<%= group.id %>' value='<%= (group.member_of? current_user) ? "Unfollow" : "Follow" %>' class='button ajax_button'></input>
+                </div>
+            <% end %>
+			<div class="clear"></div>
+		 </li>
+	<% end %>
+</ul>

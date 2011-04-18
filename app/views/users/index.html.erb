@@ -1,0 +1,16 @@
+<h1><%= @user.username %></h1>
+
+
+<% if @user != current_user and !current_user.nil? %>
+    <%- form_tag toggle_follow_user_path do -%>
+        <div id="submit_button_container">
+            <%= submit_tag (current_user.is_friend? @user) ? "Unfollow" : "Follow", :class => "button" %>
+        </div>
+        <div class="clear"></div>
+    <%- end -%>
+<% end %>
+
+&nbsp;
+
+<%= render :partial => "posts_list", :locals => {:posts => @posts } %>
+<%= render :partial => "groups_list", :locals => {:groups => @groups } %>

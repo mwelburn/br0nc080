@@ -1,0 +1,17 @@
+<h1><%= @group.group_name %></h1>
+<h2><%= @group.group_description %></h2>
+
+
+<% if !current_user.nil? %>
+    <%- form_tag toggle_follow_group_path do -%>
+        <div id="submit_button_container">
+            <%= submit_tag (group.member_of? current_user) ? "Unfollow" : "Follow", :class => "button" %>
+        </div>
+        <div class="clear"></div>
+    <%- end -%>
+<% end %>
+
+&nbsp;
+
+<%= render :partial => "posts_list", :locals => {:posts => @posts } %>
+<%= render :partial => "users_list", :locals => {:users => @users } %>
