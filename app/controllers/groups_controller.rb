@@ -28,18 +28,18 @@ class GroupsController < ApplicationController
 
   def index
     @group = Group.find_by_id(params[:group_id])
-    @posts = @group.posts
-    @users = @group.all_users
-  end
-
-  def posts
-    @group = Group.find_by_id(params[:group_id])
-    @posts = @group.posts
+    @topics = @group.topics
+    @members = @group.members
   end
 
   def users
     @group = Group.find_by_id(params[:group_id])
-    @users = @group.all_users
+    @members = @group.members
+  end
+
+  def posts
+    @group = Group.find_by_id(params[:group_id])
+    @posts = @group.topics
   end
 
 end

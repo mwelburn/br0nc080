@@ -7,6 +7,9 @@ class CreateGroups < ActiveRecord::Migration
 
       t.datetime :created_at, :null => false
     end
+
+    add_index :groups, :group_name,    :unique => true
+    add_index :groups, :group_description
   end
 
   def self.down

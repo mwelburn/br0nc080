@@ -11,6 +11,7 @@ require "populator"
 
 User.destroy_all
 Group.destroy_all
+Post.destroy_all
 
 10.times do
   user = User.new
@@ -31,7 +32,7 @@ end
 end
 
 User.all.each do |user|
-  Post.populate(5..10) do |post|
+  Post.populate(1..2) do |post|
     post.user_id = user.id
     post.message = Faker::Lorem.sentence
     post.group_id = Group.all[rand(Group.count)].id
@@ -44,5 +45,20 @@ User.all.each do |user|
 
   3.times do
     user.add_group(Group.all[rand(Group.count)])
+  end
+end
+
+existing_posts = Post.all
+existing_posts_count = Post.count
+
+User.all.each do |user|
+  5.times do
+    post = Post.new
+    post.user_id = user.id
+    post.message = Faker::Lorem.sentence
+    post.group_id = Group.all[rand(Group.count)].id
+    post.topic_id = existing_posts[rand(existing_posts_count)].id
+    post.save
+
   end
 end

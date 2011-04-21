@@ -1,0 +1,18 @@
+<h1>Members</h1>
+
+<ul id="members_list">
+	<% members.each do |member| %>
+		<li<% if members.first == member %> class="first"<% end %>>
+			<div class="member_message_container">
+				<%= h link_to member.username, user_info_path(member.username) %>
+                <% if member.posts.length > 0 %>
+                    <%= h member.posts.last.message %>
+                    <div class="time_ago">
+                        <%= distance_of_time_in_words_to_now(member.posts.last.created_at) %> ago
+                    </div>
+                <% end %>
+			</div>
+			<div class="clear"></div>
+		 </li>
+	<% end %>
+</ul>

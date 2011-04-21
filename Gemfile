@@ -11,6 +11,7 @@ gem 'jquery-rails'
 gem 'cancan'
 
 group :development do
+  gem 'sqlite3'
   gem 'nifty-generators'
   gem 'faker'
   gem 'populator'

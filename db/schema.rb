@@ -44,6 +44,9 @@ ActiveRecord::Schema.define(:version => 20110418011912) do
     t.datetime "created_at",        :null => false
   end
 
+  add_index "groups", ["group_description"], :name => "index_groups_on_group_description"
+  add_index "groups", ["group_name"], :name => "index_groups_on_group_name", :unique => true
+
   create_table "memberships", :force => true do |t|
     t.integer  "user_id"
     t.integer  "group_id"
@@ -52,12 +55,14 @@ ActiveRecord::Schema.define(:version => 20110418011912) do
   end
 
   create_table "posts", :force => true do |t|
-    t.integer  "user_id",          :null => false
-    t.string   "message",          :null => false
-    t.integer  "group_id",         :null => false
-    t.integer  "reply_to_post_id"
-    t.datetime "created_at",       :null => false
+    t.integer  "user_id",    :null => false
+    t.string   "message",    :null => false
+    t.integer  "group_id",   :null => false
+    t.integer  "topic_id"
+    t.datetime "created_at", :null => false
   end
+
+  add_index "posts", ["message"], :name => "index_posts_on_message"
 
   create_table "users", :force => true do |t|
     t.string   "email",                                 :default => "", :null => false

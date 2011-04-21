@@ -2,6 +2,8 @@ class HomeController < ApplicationController
 
   def index
     @posts = Post.all
+    # TODO - get all initial topics instead of every individual post
+    #@topics = Reply
   end
 
   def groups

@@ -34,14 +34,16 @@ class User < ActiveRecord::Base
   end
 
   def remove_friend(friend)
-    friendship = Friendship.find(:first, :conditions => ["user_id = ? and friend_id = ?", self.id, friend.id])
+    friendship = Friendship.find_by_user_id_and_friend_id(self.id, friend.id)
+    #friendship = Friendship.find(:first, :conditions => ["user_id = ? and friend_id = ?", self.id, friend.id])
     if friendship
       friendship.destroy
     end
   end
 
   def friends_of
-    Friendship.find(:all, :conditions => ["friend_id = ?", self.id]).map{|f| f.user}
+    Friendship.find_all_by_user_id(self.id).map{|f| f.user}
+    #Friendship.find(:all, :conditions => ["friend_id = ?", self.id]).map{|f| f.user}
   end
 
   def is_friend?(friend)
@@ -68,7 +70,8 @@ class User < ActiveRecord::Base
   end
 
   def remove_group(group)
-    membership = Membership.find(:first, :conditions => ["user_id = ? and group_id = ?", self.id, group.id])
+    membership = Membership.find_by_user_id_and_group_id(self.id, group.id)
+    #membership = Membership.find(:first, :conditions => ["user_id = ? and group_id = ?", self.id, group.id])
     if membership
       membership.destroy
     end
@@ -83,11 +86,13 @@ class User < ActiveRecord::Base
   end
 
   def all_groups
-    Membership.find(:all, :conditions => ["user_id = ?", self.id]).map{|f| f.group}
+    Membership.find_all_by_user_id(self.id).map{|f| f.group}
+    #Membership.find(:all, :conditions => ["user_id = ?", self.id]).map{|f| f.group}
   end
 
   def self.find_by_search_query(q)
-    User.find(:all, :conditions => ["username like ? OR email like ?", "%#{q}%", "%#{q}#"])
+    User.find_by_username("%#{q}%")
+    #User.find(:all, :conditions => ["username like ? OR email like ?", "%#{q}%", "%#{q}#"])
   end
 
   #protected methods below
