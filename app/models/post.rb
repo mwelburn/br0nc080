@@ -1,16 +1,15 @@
 class Post < ActiveRecord::Base
 
   belongs_to :user
+  belongs_to :group
+
   validates_presence_of :user_id, :message, :created_at, :group_id
 
   attr_accessible :user_id, :message, :created_at, :group_id, :topic_id
 
-  has_many :replies
-  has_many :posts, :through => :replies, :dependent => :destroy
-
   def replies
-    if !self.topic_id.nil?
-      Post.find(:all, :conditions => ["topic_id = ?", self.id], :order => "created_at desc")
+    if self.topic_id.nil?
+      Post.where("topic_id = ?", self.id).order("created_at desc")
     #Reply.find_all_by_initial_post_id(self.id)
     end
   end
@@ -38,6 +37,7 @@ class Post < ActiveRecord::Base
   end
 
   def add_reply(post)
+    self.topic_id = post.id
     #reply = replies.build(:initial_post_id => self.id, :post_id => post.id)
     #if !reply.save
     #  logger.debug "Post '${new_post.message}' already replied to '${post.message}'."

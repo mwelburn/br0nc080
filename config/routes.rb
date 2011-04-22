@@ -88,6 +88,8 @@ Grouptalk::Application.routes.draw do
 
 #  match '/friends' => 'users#friends', :as => :friends_posts
 
+  match '/post/:post_id' => 'posts#index', :as => :post_info
+
   match '/group/:group_id' => 'groups#index', :as => :group_info
   match '/group/:group_id/posts' => 'groups#posts', :as => :group_posts
   match '/group/:group_id/users' => 'groups#users', :as => :group_users

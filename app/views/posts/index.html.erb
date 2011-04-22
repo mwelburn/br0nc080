@@ -1,0 +1,19 @@
+<% if @post.nil? %>
+    <h3>Post does not exist</h3>
+<% else %>
+    <ul id="posts_list">
+      <li>
+        <div class="post_message_container">
+            <%= h link_to @post.user.username, user_info_path(@post.user.username) %>
+            <%= h @post.message %>
+            <div class="time_ago">
+                <%= distance_of_time_in_words_to_now(@post.created_at) %> ago
+            </div>
+        </div>
+        <div class="clear"></div>
+      </li>
+      <% if !@post.replies.nil? %>
+        <%= render :partial => "replies_list", :locals => {:posts => @post.replies } %>
+      <% end %>
+    </ul>
+<% end %>

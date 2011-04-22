@@ -1,0 +1,12 @@
+<% posts.each do |post| %>
+    <li<% if posts.first == post %> class="first"<% end %>>
+        <div class="post_message_container">
+            <%= h link_to post.user.username, user_info_path(post.user.username) %>
+            <%= h post.message %>
+            <div class="time_ago">
+                <%= distance_of_time_in_words_to_now(post.created_at) %> ago
+            </div>
+        </div>
+        <div class="clear"></div>
+     </li>
+<% end %>

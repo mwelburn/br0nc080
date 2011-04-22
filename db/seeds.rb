@@ -48,16 +48,17 @@ User.all.each do |user|
   end
 end
 
-existing_posts = Post.all
-existing_posts_count = Post.count
-
 User.all.each do |user|
   5.times do
     post = Post.new
     post.user_id = user.id
     post.message = Faker::Lorem.sentence
     post.group_id = Group.all[rand(Group.count)].id
-    post.topic_id = existing_posts[rand(existing_posts_count)].id
+
+    topics = Post.where("topic_id IS NULL")
+
+    post.topic_id = topics[rand(topics.count)].id
+    post.created_at = Time.now
     post.save
 
   end
