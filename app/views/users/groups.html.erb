@@ -1,0 +1,2 @@
+<h1><%= h link_to @user.name, user_info_path(@user.id) %></h1>
+<%= render :partial => "groups_list", :locals => {:groups => @groups } %>

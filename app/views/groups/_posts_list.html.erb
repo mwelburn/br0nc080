@@ -1,13 +1,11 @@
-<h1>Topics</h1>
-
-<ul id="topics_list">
-	<% topics.each do |topic| %>
-		<li<% if topics.first == topic %> class="first"<% end %>>
-			<div class="topic_message_container">
-				<%= h link_to topic.user.username, user_info_path(topic.user.username) %>
-				<%= h topic.message %>
+<ul id="posts_list">
+	<% posts.each do |post| %>
+		<li<% if posts.first == post %> class="first"<% end %>>
+			<div class="post_message_container">
+				<%= h link_to post.user.username, user_info_path(post.user.username) %>
+				<%= h link_to post.message, post_info_path(post.id) %>
 				<div class="time_ago">
-					<%= distance_of_time_in_words_to_now(topic.created_at) %> ago
+					<%= distance_of_time_in_words_to_now(post.created_at) %> ago
 				</div>
 			</div>
 			<div class="clear"></div>
