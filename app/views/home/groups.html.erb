@@ -1,10 +1,10 @@
 <ul id="groups_list">
 	<% @groups.each do |group| %>
-		<li id="<%= group.group_name %>" <% if @groups.first == group %> class="first"<% end %>>
+		<li id="<%= group.name %>" <% if @groups.first == group %> class="first"<% end %>>
 			<div class="group_description_container" style="width: 305px;">
-				<h3><%= h link_to group.group_name, group_info_path(group.id) %></h3>
-                <% if !group.group_description.length.nil? %>
-    				<%= h group.group_description %>
+				<h3><%= h link_to group.name, group_info_path(group.id) %>&nbsp;(<%= group.posts.count %>)</h3>
+                <% if !group.description.length.nil? %>
+    				<%= h group.description %>
                 <% end %>
 			</div>
             <% if !current_user.nil? %>

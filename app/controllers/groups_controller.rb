@@ -7,18 +7,18 @@ class GroupsController < ApplicationController
   def create
     @group = Group.new(params[:group])
     if @group.save
-      redirect_to group_info_path(@group.group_name), :notice => "You have created the group '${group.group_name}'."
+      redirect_to group_info_path(@group.name), :notice => "You have created the group '${group.name}'."
     else
       render :action => 'new'
     end
   end
 
   def edit
-    @group = current_group
+    @group = Group.find_by_id(params[:group])
   end
 
   def update
-    @group = current_group
+    @group = Group.find_by_id(params[:group])
     if @group.update_attributes(param[:group])
       redirect_to group_info_path(@group.group_name), :notice => "Group updated."
     else
@@ -28,8 +28,13 @@ class GroupsController < ApplicationController
 
   def index
     @group = Group.find_by_id(params[:group_id])
-    @topics = @group.topics
-    @members = @group.members
+    if @group
+      @posts = @group.posts
+      @members = @group.members
+    else
+      @posts = []
+      @members = []
+    end
   end
 
   def users
@@ -39,7 +44,7 @@ class GroupsController < ApplicationController
 
   def posts
     @group = Group.find_by_id(params[:group_id])
-    @posts = @group.topics
+    @posts = @group.posts
   end
 
 end

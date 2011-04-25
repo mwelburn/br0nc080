@@ -25,8 +25,8 @@ end
 
 5.times do
   group = Group.new
-  group.group_name = Faker::Company.name
-  group.group_description = Faker::Company.catch_phrase
+  group.name = Faker::Company.name
+  group.description = Faker::Company.catch_phrase
   group.user_id = User.all[rand(User.count)].id
   group.save
 end
@@ -40,7 +40,8 @@ User.all.each do |user|
 
   # TODO - shouldn't be able to add yourself...
   3.times do
-    user.add_friend(User.all[rand(User.count)])
+    other_users = User.where("id != ?", user.id)
+    user.follow(other_users[rand(other_users.count)])
   end
 
   3.times do
@@ -50,16 +51,13 @@ end
 
 User.all.each do |user|
   5.times do
-    post = Post.new
-    post.user_id = user.id
-    post.message = Faker::Lorem.sentence
-    post.group_id = Group.all[rand(Group.count)].id
+    comment = Comment.new
+    comment.user_id = user.id
+    comment.message = Faker::Lorem.sentence
+    comment.group_id = Group.all[rand(Group.count)].id
 
-    topics = Post.where("topic_id IS NULL")
-
-    post.topic_id = topics[rand(topics.count)].id
-    post.created_at = Time.now
-    post.save
+    comment.post_id = Post.all[rand(Post.count)].id
+    comment.save
 
   end
 end

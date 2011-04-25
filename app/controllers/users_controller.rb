@@ -3,8 +3,13 @@ class UsersController < ApplicationController
 
   def index
     @user = User.find_by_username(params[:username])
-    @posts = @user.posts
-    @groups = @user.all_groups
+    if @user
+      @posts = @user.posts
+      @groups = @user.all_groups
+    else
+      @posts = []
+      @groups = []
+    end
   end
 
   def posts

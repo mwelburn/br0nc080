@@ -10,13 +10,14 @@
   <body>
     <div id="header">
       <div id="top_links_container">
-        <% if current_user %>
-            Logged in as <%= current_user.username %> |
+        <% if user_signed_in? %>
+            Logged in as <%= h link_to current_user.username, user_info_path(current_user.username) %> |
             <%= link_to 'home', root_path %> | 
             <%= link_to 'logout', destroy_user_session_path %>
         <% else %>
             <%= link_to 'home', root_path %> | 
-            <%= link_to 'login', new_user_session_path %>
+            <%= link_to 'login', new_user_session_path %> | 
+            <%= link_to 'sign up', new_user_registration_path %>
         <% end %>
       </div>
     </div>

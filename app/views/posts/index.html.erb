@@ -1,19 +1,55 @@
-<% if @post.nil? %>
-    <h3>Post does not exist</h3>
-<% else %>
+<% if @post %>
+    
+    <h3><%= @group.name %></h3>
+
     <ul id="posts_list">
       <li>
         <div class="post_message_container">
             <%= h link_to @post.user.username, user_info_path(@post.user.username) %>
-            <%= h @post.message %>
+				<%= h link_to @post.message, post_info_path(@post.id) %>
             <div class="time_ago">
                 <%= distance_of_time_in_words_to_now(@post.created_at) %> ago
             </div>
         </div>
         <div class="clear"></div>
       </li>
-      <% if !@post.replies.nil? %>
-        <%= render :partial => "replies_list", :locals => {:posts => @post.replies } %>
+      <% if !@post.comments.nil? %>
+        <%= render :partial => "comments_list", :locals => {:comments => @post.comments } %>
+      <% end %>
+      <% if user_signed_in? %>
+          <li>
+            <div class="new_post_message_container">
+                <%- form_for Comment.new do |p| -%>
+                    <%= p.text_area :message %>
+                    <div id="submit_button_container">
+                        <%= p.submit "Reply", :class => "button ajax_button" %>
+                    </div>
+                <% end %>
+            </div>
+            <div class="clear"></div>
+          </li>
       <% end %>
     </ul>
+
+    <script type="text/javascript">
+       //on page load
+       $(document).ready(function() {
+            $('.ajax_button').click(function(e) {
+               var friend_username = $(this).attr('name');
+                $.ajax({
+                    type: "POST",
+                    url: "/add_reply/" + friend_username,
+                    success: function(msg) {
+                        //alert("You are no longer following: " + msg);
+                        $('#' + msg).slideUp('slow');
+                    }
+                });
+            });
+       });
+    </script>
+
+<% else %>
+
+Post does not exist
+
 <% end %>

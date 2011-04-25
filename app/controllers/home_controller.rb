@@ -1,7 +1,7 @@
 class HomeController < ApplicationController
 
   def index
-    @posts = Post.where("topic_id IS NULL").order("created_at desc")
+    @posts = Post.all
     # TODO - get all initial topics instead of every individual post
     #@topics = Reply
   end

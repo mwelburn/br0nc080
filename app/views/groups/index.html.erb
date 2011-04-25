@@ -1,19 +1,28 @@
-<h1><%= @group.group_name %></h1>
-<h2><%= @group.group_description %></h2>
+<% if @group %>
+
+    <h1><%= @group.name %></h1>
+    <h2><%= @group.description %></h2>
 
 
-<% if !current_user.nil? %>
-    <%- form_tag toggle_follow_group_path do -%>
-        <div id="submit_button_container">
-            <%= submit_tag (group.member_of? current_user) ? "Unfollow" : "Follow", :class => "button" %>
-        </div>
-        <div class="clear"></div>
-    <%- end -%>
+    <% if !current_user.nil? %>
+        <%- form_tag toggle_follow_group_path do -%>
+            <div id="submit_button_container">
+                <%= submit_tag (group.member_of? current_user) ? "Unfollow" : "Follow", :class => "button" %>
+            </div>
+            <div class="clear"></div>
+        <%- end -%>
+    <% end %>
+
+    &nbsp;
+
+    <h1><%= h link_to "Posts", group_posts_path(@group.id) %>&nbsp;(<%= @posts.count %>)</h1>
+    <%= render :partial => "posts_list", :locals => {:posts => @posts } %>
+
+    <h1><%= h link_to "Members", group_users_path(@group.id) %>&nbsp;(<%= @members.count %>)</h1>
+    <%= render :partial => "members_list", :locals => {:members => @members } %>
+
+<% else %>
+
+This group does not exist.
+
 <% end %>
-
-&nbsp;
-
-<%= render :partial => "topics_list", :locals => {:topics => @topics } %>
-<%= render :partial => "members_list", :locals => {:members => @members } %>
-
-REPLY

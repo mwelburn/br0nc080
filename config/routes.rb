@@ -62,21 +62,21 @@ Grouptalk::Application.routes.draw do
   #customize devise routes
   devise_for :users, :controllers => {:registrations => "user/registrations", :sessions => "user/sessions", :passwords => "user/passwords"}
 
-#  devise_scope :user do
-#    get "sign_in",              :to => "user/sessions#new",       :as => :new_user_session
-#    post "sign_in",              :to => "user/sessions#create",       :as => :user_session
-#    get "sign_out",             :to => "user/sessions#destroy",   :as => :destroy_user_session
+  devise_scope :user do
+    get "sign_in",              :to => "user/sessions#new",       :as => :new_user_session
+    post "sign_in",              :to => "user/sessions#create",       :as => :user_session
+    get "sign_out",             :to => "user/sessions#destroy",   :as => :destroy_user_session
 
-#    post "password",      :to => "user/passwords#create",   :as => :user_password
-#    get "password/new",  :to => "user/passwords#new",      :as => :new_user_password
-#    get "password/edit",      :to => "user/passwords#edit",     :as => :edit_user_password
-#    put "password", :to => "user/passwords#update"
+    put "password",      :to => "user/passwords#create",   :as => :user_password
+    get "password/new",  :to => "user/passwords#new",      :as => :new_user_password
+    get "password/edit",      :to => "user/passwords#edit",     :as => :edit_user_password
+    post "password", :to => "user/passwords#update"
 
 #    get "cancel",             :to => "user/registrations#cancel",  :as => :cancel_user_registration
 #    post "",             :to => "user/registrations#create",  :as => :user_registration
 #    get "sign_up",             :to => "user/registrations#new",  :as => :new_user_registration
 #    get "edit",             :to => "user/registrations#edit",  :as => :edit_user_registration
-#  end
+  end
 
   resources :posts
   resources :groups

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110418011912) do
+ActiveRecord::Schema.define(:version => 20110424210208) do
 
   create_table "admins", :force => true do |t|
     t.string   "email",                                 :default => "", :null => false
@@ -30,39 +30,47 @@ ActiveRecord::Schema.define(:version => 20110418011912) do
   add_index "admins", ["email"], :name => "index_admins_on_email", :unique => true
   add_index "admins", ["reset_password_token"], :name => "index_admins_on_reset_password_token", :unique => true
 
-  create_table "friendships", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "friend_id"
+  create_table "comments", :force => true do |t|
+    t.string   "user_id",    :null => false
+    t.string   "message",    :null => false
+    t.string   "post_id",    :null => false
+    t.string   "group_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "groups", :force => true do |t|
-    t.integer  "user_id",           :null => false
-    t.string   "group_name",        :null => false
-    t.string   "group_description"
-    t.datetime "created_at",        :null => false
+    t.integer  "user_id",                        :null => false
+    t.string   "name",                           :null => false
+    t.string   "description"
+    t.boolean  "private",     :default => false, :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at"
   end
 
-  add_index "groups", ["group_description"], :name => "index_groups_on_group_description"
-  add_index "groups", ["group_name"], :name => "index_groups_on_group_name", :unique => true
+  add_index "groups", ["description"], :name => "index_groups_on_description"
+  add_index "groups", ["name"], :name => "index_groups_on_name"
 
   create_table "memberships", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "group_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "user_id",    :null => false
+    t.integer  "group_id",   :null => false
+    t.datetime "created_at", :null => false
   end
 
   create_table "posts", :force => true do |t|
     t.integer  "user_id",    :null => false
     t.string   "message",    :null => false
     t.integer  "group_id",   :null => false
-    t.integer  "topic_id"
     t.datetime "created_at", :null => false
   end
 
   add_index "posts", ["message"], :name => "index_posts_on_message"
+
+  create_table "relationships", :force => true do |t|
+    t.integer  "follower_id", :null => false
+    t.integer  "followed_id", :null => false
+    t.datetime "created_at",  :null => false
+  end
 
   create_table "users", :force => true do |t|
     t.string   "email",                                 :default => "", :null => false
@@ -81,8 +89,8 @@ ActiveRecord::Schema.define(:version => 20110418011912) do
     t.string   "full_name"
   end
 
-  add_index "users", ["full_name"], :name => "index_users_on_full_name", :unique => true
+  add_index "users", ["full_name"], :name => "index_users_on_full_name"
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
-  add_index "users", ["username"], :name => "index_users_on_username", :unique => true
+  add_index "users", ["username"], :name => "index_users_on_username"
 
 end

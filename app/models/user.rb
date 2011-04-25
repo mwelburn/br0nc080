@@ -23,43 +23,52 @@ class User < ActiveRecord::Base
   has_many :posts, :dependent => :destroy
   has_many :memberships
   has_many :groups, :through => :memberships
-  has_many :friendships
-  has_many :friends, :through => :friendships
+  has_many :relationships
+  has_many :followers, :through => :relationships
+  has_many :followeds, :through => :relationships
 
-  def add_friend(friend)
-    friendship = friendships.build(:friend_id => friend.id)
-    if !friendship.save
-      logger.debug "User '${friend.email}' already exists in the user's friendship list."
+  def follow(friend)
+    #relationship = relationships.build(:followed_id => friend.id)
+    relationship = Relationship.new
+    relationship.follower_id = self.id
+    relationship.followed_id = friend.id
+    if !relationship.save
+      logger.debug "User '${friend.email}' already exists in the user's relationship list."
     end
   end
 
-  def remove_friend(friend)
-    friendship = Friendship.find_by_user_id_and_friend_id(self.id, friend.id)
+  def stop_follow(friend)
+    relationship = Relationship.find_by_follower_id_and_followed_id(self.id, friend.id)
     #friendship = Friendship.find(:first, :conditions => ["user_id = ? and friend_id = ?", self.id, friend.id])
-    if friendship
-      friendship.destroy
+    if relationship
+      relationship.destroy
     end
   end
 
-  def friends_of
-    Friendship.find_all_by_user_id(self.id).map{|f| f.user}
+  def follower_of
+    Relationship.find_all_by_follower_id(self.id).map{|f| f.user}
     #Friendship.find(:all, :conditions => ["friend_id = ?", self.id]).map{|f| f.user}
   end
 
-  def is_friend?(friend)
-    return self.friends.include? friend
+  def followed_by
+    Relationship.find_all_by_followed_id(self.id).map{|f| f.user}
+  end
+
+  def following?(friend)
+    return !Relationship.find_by_followed_id_and_follower_id(friend.id, self.id).nil?
+    #return self.followeds.include? friend
   end
 
   def toggle_follow(friend)
-    if (is_friend? friend)
-      current_user.remove_friend(:friend => friend)
+    if (following? friend)
+      current_user.stop_follow(:friend => friend)
     else
-      current_user.add_friend(:friend => friend)
+      current_user.follow(:friend => friend)
     end
   end
 
   def all_posts
-    Post.find(:all, :conditions => ["user_id in (?)", friends.map(&:id).push(self.id)], :order => "created_at desc")
+    Post.find_by_user_id(self.id).order("created_at desc")
   end
 
   def add_group(group)

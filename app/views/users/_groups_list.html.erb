@@ -4,8 +4,8 @@
 	<% groups.each do |group| %>
 		<li<% if groups.first == group %> class="first"<% end %>>
 			<div class="group_message_container">
-				<%= h link_to group.group_name, group_info_path(group.id) %>
-				<%= h group.group_description %>
+				<%= h link_to group.name, group_info_path(group.id) %>
+				<%= h group.description %>
 			</div>
 			<div class="clear"></div>
 		 </li>

@@ -2,14 +2,16 @@ class CreateGroups < ActiveRecord::Migration
   def self.up
     create_table :groups do |t|
       t.integer :user_id, :null => false
-      t.string :group_name, :null => false
-      t.string :group_description
+      t.string :name, :null => false#, :unique => true
+      t.string :description
+      t.boolean :private, :null => false, :default => false
 
       t.datetime :created_at, :null => false
+      t.datetime :updated_at
     end
 
-    add_index :groups, :group_name,    :unique => true
-    add_index :groups, :group_description
+    add_index :groups, :name
+    add_index :groups, :description
   end
 
   def self.down
