@@ -1,0 +1,188 @@
+-----------
+-QUESTIONS-
+-----------
+
+*Can all "post views" be ajax calls that show up in the same window?
+*Can we integrate some way to show first/last name within private groups?
+
+*Make viewing a post/group show up similar to how mint edits accounts in a modal window?
+
+
+-----------
+-  PAGES  -
+-----------
+
+*Header
+--Search bar?
+----Search on posts? users? groups?
+--Home
+--Login (or display who is logged in)
+----Ajax login?
+--Sign up (if not logged in)
+
+*Sign Up
+--Fill out form
+----Username
+----Email
+----First Name
+----Last Name
+----Upload Image
+----Password
+----Confirm Password
+--Facebook access later
+--Can this be a modal popup on whatever their current page is? Then on finish, they return to the same page but are logged in via ajax?
+
+*Edit Profile
+--Upload image
+--change email
+--change first name
+--change last name
+--change password
+
+*Welcome/About Page?
+--Explain what the website is?
+
+*Home Screen
+--Explain what the website is?
+--Toggle tabs between most popular/recent posts
+----Click on post takes to post page
+----Click on user name goes to user page
+--View popular/recent groups (join/remove via ajax)
+----Click on group goes to group info
+--Create Post
+----Include typeahead to choose a group
+----Allow create new group on demand if you don't see one you like (creates the post and group, then takes you to group profile if you want to make an edits?)
+
+*List of Groups
+--Search Groups
+--View Group Info via click
+--Join/Remove Group via button (ajax)
+--View number of topics per group
+----ajax to view topics?
+--View number of posts? per group
+----ajax to view posts probably no different than topics, so don't implement
+--View number of group followers
+----ajax to view followers? link to go to a followers page (similar to twitter. or ajax popup?)
+--View recent/popular posts via ajax call?
+
+*Group Info
+--Follow group
+--Request to join private group
+----Sends email to admins (if checked)
+----Adds a request to the manage group page
+--"Share" Group (public only)
+--View recent/popular posts via ajax call?
+----public or member of private
+--View followers
+----allow this for private groups you aren't a member of?
+--Create post (if private, you must be approved follower)
+----Checkbox if you aren't following (pre-checked) asking if you want to follow this group
+----Will auto add to this group (no prompt)
+
+*Create Group
+--Image
+--Create description
+--Mark as public or private
+--Invite users to follow
+--Add other administrators
+--Choose whether to be notified of requests via email
+----Private only
+
+*Manage Group
+--Edit image
+--Edit description
+--Mark as public or private
+--Invite users to follow
+--Add other administrators
+--Accept/Reject follow requests (private only)
+--Choose whether to be notified of requests via email
+----Private only
+
+*Posts within a Group
+--Toggle tabs between most recent/most popular/friends(recent) posts
+--Click on topic goes to that post page
+--Click on user who created topic goes to that users page
+--Can view responses to a topic via ajax call
+----Can reply via this
+----Paginate 50 comments at a time?
+
+*Search Posts
+--Ability to view a user info
+--Ability to reply to a post?
+--Ability to view post/replies by going to post page
+
+*Search Users
+--Ability to follow a user
+--Ability to click on a users page
+
+*User Page
+--View recent posts
+--View groups
+--View following
+--View followers
+
+*User Home Page
+--Toggle tabs between recent friend post activity and group activity
+--Display groups, friends on a sidebar
+--Display "you might be interested in"
+--Recently viewed posts
+--Recently viewed groups
+
+*Friends Posts
+--List of posts and replies friends have
+----For replies, show the post and say here is just their comment
+
+*Friends Groups
+--Show all the groups your friends are in, with a number denoting how many friends are in each group
+----Ajax to show who is in each group
+----Allow joining group
+
+-----------
+-  MODEL  -
+-----------
+
+User
+-firstname
+-lastname
+-email
+-username (must be unique)
+-password(encrypted)
+-id
+
+Group
+-name (must be unique)
+-description
+-id
+-group_owner_id?
+-created_at
+-private(boolean)
+
+AdministerGroup
+-group_id
+-user_id
+-created_at
+
+Post
+-id
+-user_id
+-message
+-created_at
+-group_id
+
+Comment
+-id
+-user_id
+-message
+-post_id
+-created_at
+-group_id
+
+Relationship
+-follower_id
+-followed_id
+-created_at
+
+Membership
+-user_id
+-group_id
+-created_at
