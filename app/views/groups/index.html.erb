@@ -7,11 +7,13 @@
     <% if !current_user.nil? %>
         <%- form_tag toggle_follow_group_path do -%>
             <div id="submit_button_container">
-                <%= submit_tag (group.member_of? current_user) ? "Unfollow" : "Follow", :class => "button" %>
+                <%= submit_tag (@group.member_of? current_user) ? "Unfollow" : "Follow", :class => "button" %>
             </div>
             <div class="clear"></div>
         <%- end -%>
     <% end %>
+
+    <%= render :partial => "create_post", :locals => {:group => @group } %>
 
     &nbsp;
 

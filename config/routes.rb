@@ -79,7 +79,9 @@ Grouptalk::Application.routes.draw do
   end
 
   resources :posts
-  resources :groups
+  resources :groups do
+    get :autocomplete_group_name, :on => :collection
+  end
   resources :users
 
 #  match '/search' => 'home#search', :as => :search

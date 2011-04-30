@@ -1,0 +1,11 @@
+<%- form_for Post.new do |f| -%>
+	<div id="new_post_form">
+		<div class="clear"></div>
+		<%= f.text_area :message %>
+        <%= f.autocomplete_field :group, autocomplete_group_name_groups_path %>
+		<div id="submit_button_container">
+            <%= f.submit "Post", :class => "button" %>
+		</div>
+		<div class="clear"></div>
+	</div>
+<%- end -%>
