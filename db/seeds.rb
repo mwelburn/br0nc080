@@ -49,15 +49,18 @@ User.all.each do |user|
   end
 end
 
+all_posts = Post.all
+all_posts_count = Post.count
+
 User.all.each do |user|
   5.times do
-    comment = Comment.new
-    comment.user_id = user.id
-    comment.message = Faker::Lorem.sentence
-    comment.group_id = Group.all[rand(Group.count)].id
+    post = Post.new
+    post.user_id = user.id
+    post.message = Faker::Lorem.sentence
+    post.group_id = Group.all[rand(Group.count)].id
 
-    comment.post_id = Post.all[rand(Post.count)].id
-    comment.save
+    post.topic_id = all_posts[rand(all_posts_count)].id
+    post.save
 
   end
 end

@@ -1,4 +1,8 @@
 <%= h link_to "Users", user_home_path %>
 <%= h link_to "Groups", group_home_path %>
 
+<% if !current_user.nil? %>
+    <%= render :partial => "create_post" %>
+<% end %>
+
 <%= render :partial => "posts_list", :locals => {:posts => @posts } %>

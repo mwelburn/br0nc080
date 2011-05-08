@@ -11,9 +11,10 @@
             </div>
             <div class="clear"></div>
         <%- end -%>
+
+        <%= render :partial => "create_post", :locals => {:group => @group} %>
     <% end %>
 
-    <%= render :partial => "create_post", :locals => {:group => @group } %>
 
     &nbsp;
 

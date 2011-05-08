@@ -1,12 +1,12 @@
 <% if @post %>
     
-    <h3><%= @group.name %></h3>
+    <h3><%= h link_to @group.name, group_info_path(@group.id) %></h3>
 
     <ul id="posts_list">
       <li>
         <div class="post_message_container">
             <%= h link_to @post.user.username, user_info_path(@post.user.username) %>
-				<%= h link_to @post.message, post_info_path(@post.id) %>
+				<%= @post.message %>
             <div class="time_ago">
                 <%= distance_of_time_in_words_to_now(@post.created_at) %> ago
             </div>
@@ -14,13 +14,15 @@
         <div class="clear"></div>
       </li>
       <% if !@post.comments.nil? %>
-        <%= render :partial => "comments_list", :locals => {:comments => @post.comments } %>
+        <%= render :partial => "comments_list", :locals => {:comments => @post.replies } %>
       <% end %>
       <% if user_signed_in? %>
           <li>
             <div class="new_post_message_container">
-                <%- form_for Comment.new do |p| -%>
+                <%- form_for Post.new do |p| -%>
                     <%= p.text_area :message %>
+                    <%= p.hidden_field :group_id, :value => @group.id %>
+                    <%= p.hidden_field :topic_id, :value => @post.id  %>
                     <div id="submit_button_container">
                         <%= p.submit "Reply", :class => "button ajax_button" %>
                     </div>

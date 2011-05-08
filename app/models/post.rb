@@ -5,12 +5,13 @@ class Post < ActiveRecord::Base
 
   validates_presence_of :user_id, :message, :group_id
 
-  attr_accessible :user_id, :message, :created_at, :group_id
+  attr_accessible :user_id, :message, :group_id, :topic_id, :created_at, :updated_at
 
-  has_many :comments, :dependent => :destroy
+  has_many :comments, :dependent => :destroy, :class_name => "Post"
 
   def replies
-    Comment.find_all_by_post_id(self.id).order("created_at desc")
+    Post.where("topic_id = ?", self.id).order("created_at desc")
+    #Post.find_all_by_topic_id(self.id).order("created_at desc")
   end
 
   def self.find_message_by_search_query(q)
@@ -23,11 +24,11 @@ class Post < ActiveRecord::Base
   end
 
   def is_editable?
-    #return self.user_id = current_user.id
+    return self.user_id = current_user.id
   end
 
   def is_reply_to?(post)
-    #return self.topic_id = post.id
+    return self.topic_id = post.id
     #return Reply.find_by_post_id_and_initial_post_id(self.id, post.id).nil?
   end
 

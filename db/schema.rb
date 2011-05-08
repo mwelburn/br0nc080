@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110424210208) do
+ActiveRecord::Schema.define(:version => 20110418011912) do
 
   create_table "admins", :force => true do |t|
     t.string   "email",                                 :default => "", :null => false
@@ -29,15 +29,6 @@ ActiveRecord::Schema.define(:version => 20110424210208) do
 
   add_index "admins", ["email"], :name => "index_admins_on_email", :unique => true
   add_index "admins", ["reset_password_token"], :name => "index_admins_on_reset_password_token", :unique => true
-
-  create_table "comments", :force => true do |t|
-    t.string   "user_id",    :null => false
-    t.string   "message",    :null => false
-    t.string   "post_id",    :null => false
-    t.string   "group_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "groups", :force => true do |t|
     t.integer  "user_id",                        :null => false
@@ -61,7 +52,9 @@ ActiveRecord::Schema.define(:version => 20110424210208) do
     t.integer  "user_id",    :null => false
     t.string   "message",    :null => false
     t.integer  "group_id",   :null => false
+    t.integer  "topic_id"
     t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   add_index "posts", ["message"], :name => "index_posts_on_message"
