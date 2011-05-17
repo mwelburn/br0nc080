@@ -1,8 +1,10 @@
 <% comments.each do |comment| %>
-    <li<% if comments.first == comment %> class="first"<% end %>>
+    <li id="li_<%= comment.id %>">
         <div class="comment_message_container">
             <%= h link_to comment.user.username, user_info_path(comment.user.username) %>
-            <%= h comment.message %>
+            <div class="msg_container">
+                <%= h comment.message %>
+            </div>
             <div class="time_ago">
                 <%= distance_of_time_in_words_to_now(comment.created_at) %> ago
             </div>

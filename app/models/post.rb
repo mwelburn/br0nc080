@@ -7,10 +7,10 @@ class Post < ActiveRecord::Base
 
   attr_accessible :user_id, :message, :group_id, :topic_id, :created_at, :updated_at
 
-  has_many :comments, :dependent => :destroy, :class_name => "Post"
+  #has_many :comments, :dependent => :destroy, :class_name => "Post"
 
   def replies
-    Post.where("topic_id = ?", self.id).order("created_at desc")
+    Post.where("topic_id = ?", self.id).order("created_at asc")
     #Post.find_all_by_topic_id(self.id).order("created_at desc")
   end
 

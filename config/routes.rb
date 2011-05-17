@@ -79,9 +79,7 @@ Grouptalk::Application.routes.draw do
   end
 
   resources :posts
-  resources :groups do
-    get :autocomplete_group_name, :on => :collection
-  end
+  resources :groups
   resources :users
 
 #  match '/search' => 'home#search', :as => :search
@@ -96,6 +94,7 @@ Grouptalk::Application.routes.draw do
   match '/group/:group_id/posts' => 'groups#posts', :as => :group_posts
   match '/group/:group_id/users' => 'groups#users', :as => :group_users
   match '/group/:group_id/toggle_follow' => 'groups#toggle_follow', :as => :toggle_follow_group
+  match '/ajax/post' => 'posts#create_via_ajax', :as => :post_via_ajax
 
   match '/user/:username' => 'users#index', :as => :user_info
   match '/user/:username/posts' => 'users#posts', :as => :user_posts

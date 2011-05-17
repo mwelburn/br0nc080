@@ -73,3 +73,8 @@ a {
 .error_messages ul {
   margin: 0;
 }
+
+/* CUSTOM CSS */
+#li_template {
+    display: none;
+}

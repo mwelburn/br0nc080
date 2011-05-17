@@ -12,6 +12,30 @@ class PostsController < ApplicationController
     #render :text => post.inspect
   end
 
+  def create_via_ajax
+    message = params[:message]
+    group_id = params[:group_id]
+    topic_id = params[:topic_id]
+
+    if (group_id)
+      post = Post.new
+      post.group_id = group_id
+      post.message = message
+      post.user_id = current_user.id
+      if (topic_id)
+        post.topic_id = topic_id
+      end
+
+      if post.save!
+        render :text => post.id
+      else
+        render :text => "-1"
+      end
+    else
+      render :text => "-2"
+    end
+  end
+
   def destroy
 
   end

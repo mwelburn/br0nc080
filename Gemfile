@@ -9,7 +9,6 @@ gem 'mysql'
 gem 'devise'
 gem 'jquery-rails'
 gem 'cancan'
-gem 'rails3-jquery-autocomplete'
 
 group :development do
   gem 'sqlite3'

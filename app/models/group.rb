@@ -5,7 +5,6 @@ class Group < ActiveRecord::Base
   attr_accessible :user_id, :name, :description, :group_id, :private
 
   has_many :posts
-  has_many :comments
 
   has_many :memberships
   has_many :users, :through => :memberships
@@ -19,11 +18,11 @@ class Group < ActiveRecord::Base
   end
 
   def posts
-    Post.where("group_id = ?", self.id).order("created_at desc")
+    Post.where("group_id = ? and topic_id is null", self.id).order("created_at desc")
   end
 
   def comments
-    Comment.find_all_by_group_id(self.id).order("created_at desc")
+    Post.where("group_id = ? and topic_id is not null", self.id).order("created_at desc")
   end
 
   def self.find_by_search_query(q)

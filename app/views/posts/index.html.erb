@@ -3,30 +3,27 @@
     <h3><%= h link_to @group.name, group_info_path(@group.id) %></h3>
 
     <ul id="posts_list">
-      <li>
+      <li id="li_<%= @post.id %>">
         <div class="post_message_container">
             <%= h link_to @post.user.username, user_info_path(@post.user.username) %>
-				<%= @post.message %>
+		    <%= h @post.message %>
             <div class="time_ago">
                 <%= distance_of_time_in_words_to_now(@post.created_at) %> ago
             </div>
         </div>
         <div class="clear"></div>
       </li>
-      <% if !@post.comments.nil? %>
+      <% if !@post.replies.nil? %>
         <%= render :partial => "comments_list", :locals => {:comments => @post.replies } %>
       <% end %>
       <% if user_signed_in? %>
-          <li>
+          <li id="new_post_li">
             <div class="new_post_message_container">
-                <%- form_for Post.new do |p| -%>
-                    <%= p.text_area :message %>
-                    <%= p.hidden_field :group_id, :value => @group.id %>
-                    <%= p.hidden_field :topic_id, :value => @post.id  %>
-                    <div id="submit_button_container">
-                        <%= p.submit "Reply", :class => "button ajax_button" %>
-                    </div>
-                <% end %>
+                <div class="clear"></div>
+                <input type="textarea" id="txt_post_message" />
+                <div id="submit_button_container">
+                    <input type="button" id="btn_post_reply" class="button ajax_button" value="Reply" title="Reply" />
+                </div>
             </div>
             <div class="clear"></div>
           </li>
@@ -36,14 +33,70 @@
     <script type="text/javascript">
        //on page load
        $(document).ready(function() {
-            $('.ajax_button').click(function(e) {
-               var friend_username = $(this).attr('name');
+            $('#btn_post_reply').click(function(e) {
+               var group_id = "<%= @post.group_id %>";
+               var topic_id = "<%= @post.id %>";
+               var message = $("#txt_post_message").val();
+
                 $.ajax({
                     type: "POST",
-                    url: "/add_reply/" + friend_username,
-                    success: function(msg) {
-                        //alert("You are no longer following: " + msg);
-                        $('#' + msg).slideUp('slow');
+                    url: "/ajax/post",
+                    data: ({
+                        "message" : message,
+                        "group_id" : group_id,
+                        "topic_id" : topic_id
+                    }),
+                    success: function(post_id) {
+                        if (post_id == null || post_id < 0) {
+                           alert("Error saving post. Please re-try.");
+                        } else {
+                           var $message = $("#txt_post_message");
+
+                           //copy the template li
+                      //     var $li_template = $("#li_template");
+                      //     var $new_list_item = $li_template.clone();
+                      //     $new_list_item.insertBefore($li_template);
+
+                           //insert the message
+                      //     var time_ago = $new_list_item.find("div.time_ago")[0];
+                      //     $(time_ago).before($($message.val()));
+                           //$($message.val()).insertBefore($(time_ago));
+
+                           //reset the textbox
+                      //     $message.val("");
+
+                           //remove the template identifier
+                      //     $new_list_item.hide();
+                      //     $new_list_item.attr("id", "li_" + post_id);
+                      //     $new_list_item.slideDown('slow');
+
+                           var $new_list_item = $("<li></li>");
+                           $new_list_item.hide();
+                           $new_list_item.attr("id", "li_" + post_id);
+
+                           var $container = $("<div></div>").addClass("comment_message_container");
+                           var $user_link = $("<a><%=current_user.username%></a>").attr("href", "<%= user_info_path(current_user.username) %>");
+
+                           var $msg_container = $("<div>" + $message.val() + "</div>").addClass("msg_container");
+                           var $time_ago_container = $("<div><%= distance_of_time_in_words_to_now(Time.now) %> ago</div>").addClass("time_ago");
+
+                           $container.append($user_link);
+                           $container.append($msg_container);
+                           $container.append($time_ago_container);
+
+                           var $clear = $("<div></div>").addClass("clear")
+
+                           $new_list_item.append($container);
+                           $new_list_item.append($clear);
+
+                           //reset the textbox
+                           $message.val("");
+
+                           var $new_post_li = $("li#new_post_li");
+                           $new_list_item.insertBefore($new_post_li);
+                           $new_list_item.slideDown('slow');
+                        }
+
                     }
                 });
             });
